@@ -1,0 +1,10 @@
+{
+    "java.project.sourcePaths": [
+        "src"
+    ],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": [
+        "C:/Users/dorli/OneDrive/Documentos/Programacion3/openjfx-21.0.10_windows-x64_bin-sdk/javafx-sdk-21.0.10/lib/*.jar"
+    ],
+    "javafx.libPath": "C:/Users/dorli/OneDrive/Documentos/Programacion3/openjfx-21.0.10_windows-x64_bin-sdk/javafx-sdk-21.0.10/lib"
+}
