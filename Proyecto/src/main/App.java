@@ -5,30 +5,32 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class App extends Application {
+public class App extends Application 
+{
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) 
+    {
 
-        try {
-            // carga el archivo fxml //
-            FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/view/Tablero.fxml")
+        try 
+        {
+            FXMLLoader carga = new FXMLLoader(
+                getClass().getResource("/view/Menu.fxml") 
             );
 
             // crea la escena con el contenido del fxml //
-            Scene scene = new Scene(loader.load());
+            Scene scene = new Scene(carga.load());
 
-            // titulo de la ventana //
+            // maximiza la ventana al iniciar //
+            stage.setMaximized(true);
+
             stage.setTitle("Ajedrez");
 
-            // asigna la escena al stage //
             stage.setScene(scene);
 
             // evita que el usuario cambie el tamaño // (para mantener el diseño del tablero)
             stage.setResizable(false);
 
-            // muestra la ventana // 
             stage.show();
 
         } catch (Exception e) {

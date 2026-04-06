@@ -1,6 +1,96 @@
+
 .root {
+    -fx-background-color: black;
+}
+
+.fondo_externo {
+    -fx-background-color: black;
+}
+/* fondo del tablero, menu y juego */
+.fondo_tablero {
     -fx-background-image: url("../resources/Img/Tablero.PNG");
     -fx-background-size: cover;
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
 }
+
+.fondo_menu {
+    -fx-background-image: url("../resources/Img/Menu.PNG");
+    -fx-background-size: contain;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: black;
+}
+
+.boton_menu {
+    -fx-background-color: linear-gradient(to bottom, #5a3b1e, #2e1d0f);
+    -fx-text-fill: #f5e6c8;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-pref-width: 280;
+    -fx-pref-height: 55;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 10, 0.5, 0, 3);
+}
+
+.boton_menu:hover {
+    -fx-background-color: linear-gradient(to bottom, #8b5a2b, #3a2414);
+    -fx-effect: dropshadow(gaussian, rgba(255,140,60,0.9), 20, 0.6, 0, 0);
+    -fx-scale-x: 1.07;
+    -fx-scale-y: 1.07;
+}
+
+.boton_menu:pressed {
+    -fx-background-color: linear-gradient(to bottom, #2e1d0f, #1a1008);
+    -fx-scale-x: 0.96;
+    -fx-scale-y: 0.96;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.9), 5, 0.4, 0, 1);
+    -fx-translate-y: 2;
+}
+
+.fondo_juego {
+    -fx-background-image: url("../resources/Img/FondoJuego.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+.texto_turno {
+    -fx-text-fill: #f5e6c8;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.texto_estado {
+    -fx-text-fill: #d9c7a1;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.boton_reiniciar {
+    -fx-background-color: linear-gradient(to bottom, #5a3b1e, #2e1d0f);
+    -fx-text-fill: #f5e6c8;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 10, 0.5, 0, 3);
+}
+
+.boton_reiniciar:hover {
+    -fx-background-color: linear-gradient(to bottom, #8b5a2b, #3a2414);
+    -fx-effect: dropshadow(gaussian, rgba(255,140,60,0.9), 20, 0.6, 0, 0);
+    -fx-scale-x: 1.04;
+    -fx-scale-y: 1.04;
+}
+
+.boton_reiniciar:pressed {
+    -fx-background-color: linear-gradient(to bottom, #2e1d0f, #1a1008);
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.9), 5, 0.4, 0, 1);
+    -fx-translate-y: 2;
+}
+
+/* La mayor parte de este css proviene de una plantilla en linea (Alterada a mis gustos de colores) */

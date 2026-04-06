@@ -1,62 +1,133 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import model.Alfil;
+import model.Caballo;
+import model.Peon;
+import model.Pz;
+import model.Reina;
+import model.Rey;
+import model.Torre;
 
-public class MainController {
+public class MainController 
+{
 
     // grid del fxml (tablero) //
     @FXML
     private GridPane gridTablero;
 
-    // matriz que representa el tablero logico (8x8) // cada casilla puede contener el nombre de la pieza o null si esta vacia
-    private String[][] tablero = new String[8][8];
+    // label que muestra de quien es el turno //
+    @FXML
+    private Label lblTurno;
+
+    // label que muestra el estado actual de la partida //
+    @FXML
+    private Label lblEstado;
+
+    // matriz que representa el tablero logico (8x8) // cada casilla puede contener una pieza o null si esta vacia
+    private Pz[][] tablero = new Pz[8][8];
+
+    // variable para controlar el turno actual // true = blancas, false = negras
+    private boolean turnoBlancas = true;
+
+    // guarda la pieza seleccionada //
+    private int filaSeleccionada = -1;
+    private int colSeleccionada = -1;
+
+    // lista de movimientos posibles de la pieza seleccionada //
+    private List<int[]> movimientosPosibles = new ArrayList<>();
 
     // se ejecuta cuando carga el fxml //
     @FXML
-    public void initialize() {
+    public void initialize() 
+    {
         inicializarTablero();
+        actualizarTurno();
+        actualizarEstado("En juego");
         dibujarTablero();
     }
 
-    // Coloca las piezas en su posición inicial //
-    private void inicializarTablero() {
+    // coloca las piezas en su posicion inicial //
+    private void inicializarTablero() 
+    {
 
-        tablero = new String[][]{
-            {"torreN", "caballoN", "alfilN", "reinaN", "reyN", "alfilN", "caballoN", "torreN"},
-            {"peonN",  "peonN",    "peonN",  "peonN",  "peonN", "peonN",  "peonN",    "peonN"},
+        tablero = new Pz[][]{
+            {
+                new Torre(false), new Caballo(false), new Alfil(false), new Reina(false),
+                new Rey(false), new Alfil(false), new Caballo(false), new Torre(false)
+            },
+
+            {
+                new Peon(false), new Peon(false), new Peon(false), new Peon(false),
+                new Peon(false), new Peon(false), new Peon(false), new Peon(false)
+            },
+
             {null, null, null, null, null, null, null, null},
             {null, null, null, null, null, null, null, null},
             {null, null, null, null, null, null, null, null},
             {null, null, null, null, null, null, null, null},
-            {"peonB",  "peonB",    "peonB",  "peonB",  "peonB", "peonB",  "peonB",    "peonB"},
-            {"torreB", "caballoB", "alfilB", "reinaB", "reyB",  "alfilB", "caballoB", "torreB"}
+
+            {
+                new Peon(true), new Peon(true), new Peon(true), new Peon(true),
+                new Peon(true), new Peon(true), new Peon(true), new Peon(true)
+            },
+
+            {
+                new Torre(true), new Caballo(true), new Alfil(true), new Reina(true),
+                new Rey(true), new Alfil(true), new Caballo(true), new Torre(true)
+            }
         };
     }
 
     // dibuja todo el tablero en pantalla //
-    private void dibujarTablero() {
+    private void dibujarTablero() 
+    {
 
         gridTablero.getChildren().clear();
 
-        for (int fila = 0; fila < 8; fila++) {
-            for (int col = 0; col < 8; col++) {
+        for (int fila = 0; fila < 8; fila++) 
+        {
+            for (int col = 0; col < 8; col++) 
+            {
 
-                String pieza = tablero[fila][col];
+                Pz pieza = tablero[fila][col];
 
                 // cada casilla //
                 StackPane celda = new StackPane();
 
-                if (pieza != null) {
+                // tamano visual de cada casilla //
+                celda.setPrefSize(63, 59);
 
-                    // crea la imagen de la pieza // (obtenerRuta devuelve la ruta según el nombre de la pieza)
+                // resalta la casilla seleccionada //
+                if (fila == filaSeleccionada && col == colSeleccionada)
+                {
+                    celda.setStyle("-fx-background-color: rgba(255, 215, 0, 0.35); -fx-border-color: gold; -fx-border-width: 3;");
+                }
+
+                // resalta los movimientos posibles //
+                else if (esMovimientoPosible(fila, col))
+                {
+                    celda.setStyle("-fx-background-color: rgba(0, 255, 0, 0.30); -fx-border-color: limegreen; -fx-border-width: 2;");
+                }
+
+                if (pieza != null) 
+                {
+
+                    // crea la imagen de la pieza // (obtenerRutaImagen devuelve la ruta segun la pieza)
                     ImageView img = new ImageView(
-                        new Image(getClass().getResourceAsStream(obtenerRuta(pieza)))
+                        new Image(getClass().getResourceAsStream(pieza.obtenerRutaImagen()))
                     );
-                    // tamaño de la imagen de las piezas //
+
+                    // tamano de la imagen de las piezas //
                     img.setFitWidth(50);
                     img.setFitHeight(50);
                     img.setPreserveRatio(true);
@@ -64,43 +135,152 @@ public class MainController {
                     celda.getChildren().add(img);
                 }
 
-                // guardar posicion para el click// (necesario porque fila y col cambian en cada iteración)
+                // guardar posicion para el click // (necesario porque fila y col cambian en cada iteracion)
                 final int f = fila;
                 final int c = col;
 
-                // evento de click (debug por ahora)
                 celda.setOnMouseClicked(e -> {
-                    System.out.println("click en: " + f + "," + c);
+                    manejarClick(f, c);
                 });
 
-                // agregar al grid
+                // agregar al grid // (columna, fila)
                 gridTablero.add(celda, col, fila);
             }
         }
     }
 
-    // devuelve la ruta de la imagen según la pieza // (la pieza se identifica por su nombre)
-    private String obtenerRuta(String pieza) {
+    // maneja el click sobre una casilla del tablero //
+    private void manejarClick(int fila, int col)
+    {
+        Pz piezaActual = tablero[fila][col];
 
-        return switch (pieza) {
+        // si no hay seleccion previa //
+        if (filaSeleccionada == -1 && colSeleccionada == -1)
+        {
+            // validacion para solo permitir seleccionar piezas del turno actual //
+            if (piezaActual != null && piezaActual.esBlanca() == turnoBlancas)
+            {
+                seleccionarPieza(fila, col);
+            }
 
-            // blancas
-            case "torreB"   -> "/resources/Img/Blancas/torre.png";
-            case "caballoB" -> "/resources/Img/Blancas/caballo.png";
-            case "alfilB"   -> "/resources/Img/Blancas/alfil.png";
-            case "reinaB"   -> "/resources/Img/Blancas/reina.png";
-            case "reyB"     -> "/resources/Img/Blancas/rey.png";
-            case "peonB"    -> "/resources/Img/Blancas/peon.png";
+            return;
+        }
 
-            // negras
-            case "torreN"   -> "/resources/Img/Negras/torre.png";
-            case "caballoN" -> "/resources/Img/Negras/caballo.png";
-            case "alfilN"   -> "/resources/Img/Negras/alfil.png";
-            case "reinaN"   -> "/resources/Img/Negras/reina.png";
-            case "reyN"     -> "/resources/Img/Negras/rey.png";
-            case "peonN"    -> "/resources/Img/Negras/peon.png";
+        // validacion para saber si se hizo click en un movimiento valido //
+        if (esMovimientoPosible(fila, col))
+        {
+            moverPieza(fila, col);
+            return;
+        }
 
-            default -> null;
-        };
+        // validacion para saber si se hizo click en otra pieza del mismo color, cambiara la seleccion actual //
+        if (piezaActual != null && piezaActual.esBlanca() == turnoBlancas)
+        {
+            seleccionarPieza(fila, col);
+            return;
+        }
+
+        // si no fue una opcion valida, se limpia la seleccion //
+        limpiarSeleccion();
+        dibujarTablero();
+    }
+
+    // validacion para que  al seleccionar una pieza se calculen sus movimientos validos //
+    private void seleccionarPieza(int fila, int col)
+    {
+        filaSeleccionada = fila;
+        colSeleccionada = col;
+
+        Pz pieza = tablero[fila][col];
+
+        if (pieza != null)
+        {
+            movimientosPosibles = pieza.obtenerMovimientosValidos(tablero, fila, col);
+        }
+        else
+        {
+            movimientosPosibles = new ArrayList<>();
+        }
+
+        dibujarTablero();
+    }
+
+    // movimiento de una pieza a una nueva casilla //
+    private void moverPieza(int filaDestino, int colDestino)
+    {
+        tablero[filaDestino][colDestino] = tablero[filaSeleccionada][colSeleccionada];
+        tablero[filaSeleccionada][colSeleccionada] = null;
+
+        limpiarSeleccion();
+        cambiarTurno();
+        dibujarTablero();
+    }
+
+    // limpia la seleccion actual y los movimientos marcados //
+    private void limpiarSeleccion()
+    {
+        filaSeleccionada = -1;
+        colSeleccionada = -1;
+        movimientosPosibles.clear();
+    }
+
+    // verifica si una casilla esta dentro de los movimientos posibles //
+    private boolean esMovimientoPosible(int fila, int col)
+    {
+        for (int[] mov : movimientosPosibles)
+        {
+            if (mov[0] == fila && mov[1] == col)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // actualiza el texto del turno segun el jugador actual //
+    private void actualizarTurno()
+    {
+        if (turnoBlancas) 
+        {
+            lblTurno.setText("Turno: Blancas");
+        } 
+        else 
+        {
+            lblTurno.setText("Turno: Negras");
+        }
+    }
+
+    // actualiza el estado visible de la partida //
+    private void actualizarEstado(String estado)
+    {
+        lblEstado.setText("Estado: " + estado);
+    }
+
+    // cambia el turno actual //
+    private void cambiarTurno()
+    {
+        turnoBlancas = !turnoBlancas;
+        actualizarTurno();
+    }
+
+    // reinicia la partida completa //
+    @FXML
+    private void reiniciarPartida(ActionEvent evento)
+    {
+        // vuelve a colocar todas las piezas en su posicion inicial //
+        inicializarTablero();
+
+        // reinicia el turno a blancas //
+        turnoBlancas = true;
+
+        // limpia cualquier seleccion previa //
+        limpiarSeleccion();
+
+        // actualiza los textos de la interfaz //
+        actualizarTurno();
+        actualizarEstado("En juego");
+
+        dibujarTablero();
     }
 }
