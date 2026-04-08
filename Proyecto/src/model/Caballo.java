@@ -11,6 +11,7 @@ public class Caballo extends Pz
         super(esBlanca);
     }
 
+    // ruta de la imagen //
     @Override
     public String obtenerRutaImagen()
     {
@@ -24,10 +25,35 @@ public class Caballo extends Pz
         }
     }
 
+    // devuelve los movimientos validos del caballo //
     @Override
     public List<int[]> obtenerMovimientosValidos(Pz[][] tablero, int fila, int col)
     {
-        // Vacio aun sin logica (solo para probar) //
-        return new ArrayList<>();
+        List<int[]> movimientos = new ArrayList<>();
+
+        // posibles movimientos en L //
+        int[][] posiciones = {
+            {-2, -1}, {-2, 1},
+            {-1, -2}, {-1, 2},
+            {1, -2},  {1, 2},
+            {2, -1},  {2, 1}
+        };
+
+        for (int i = 0; i < posiciones.length; i++)
+        {
+            int nuevaFila = fila + posiciones[i][0];
+            int nuevaCol = col + posiciones[i][1];
+
+            if (estaDentro(nuevaFila, nuevaCol))
+            {
+                // si esta vacio o hay enemigo //
+                if (estaVacia(tablero, nuevaFila, nuevaCol) || esEnemiga(tablero, nuevaFila, nuevaCol))
+                {
+                    movimientos.add(new int[]{nuevaFila, nuevaCol});
+                }
+            }
+        }
+
+        return movimientos;
     }
 }

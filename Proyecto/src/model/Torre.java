@@ -11,7 +11,7 @@ public class Torre extends Pz
         super(esBlanca);
     }
 
-    // devuelve la ruta de la imagen //
+    // ruta de la imagen //
     @Override
     public String obtenerRutaImagen()
     {
@@ -25,7 +25,7 @@ public class Torre extends Pz
         }
     }
 
-    // devuelve los movimientos validos de la torre //
+    // devuelve los movimientos validos de las torres //
     @Override
     public List<int[]> obtenerMovimientosValidos(Pz[][] tablero, int fila, int col)
     {
@@ -46,7 +46,7 @@ public class Torre extends Pz
         return movimientos;
     }
 
-    // recorre una direccion hasta encontrar limite o una pieza //
+    // Va en una dirección hasta encontrar limite o rival a qn machacar //
     private void recorrerDireccion(Pz[][] tablero, List<int[]> movimientos, int fila, int col, int pasoFila, int pasoCol)
     {
         int nuevaFila = fila + pasoFila;

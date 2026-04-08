@@ -17,11 +17,11 @@ public class Rey extends Pz
     {
         if (esBlanca)
         {
-            return "/resources/Img/Blancas/caballo.png";
+            return "/resources/Img/Blancas/Rey.png";
         }
         else
         {
-            return "/resources/Img/Negras/caballo.png";
+            return "/resources/Img/Negras/Rey.png";
         }
     }
 

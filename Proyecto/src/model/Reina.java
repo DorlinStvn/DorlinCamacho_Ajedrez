@@ -17,11 +17,11 @@ public class Reina extends Pz
     {
         if (esBlanca)
         {
-            return "/resources/Img/Blancas/caballo.png";
+            return "/resources/Img/Blancas/Reina.png";
         }
         else
         {
-            return "/resources/Img/Negras/caballo.png";
+            return "/resources/Img/Negras/Reina.png";
         }
     }
 

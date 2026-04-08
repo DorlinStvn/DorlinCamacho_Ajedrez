@@ -17,6 +17,9 @@ import model.Pz;
 import model.Reina;
 import model.Rey;
 import model.Torre;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
 
 public class MainController 
 {
@@ -46,6 +49,9 @@ public class MainController
     // lista de movimientos posibles de la pieza seleccionada //
     private List<int[]> movimientosPosibles = new ArrayList<>();
 
+    // reproductor de musica del juego //
+    private MediaPlayer reproductorJuego;
+
     // se ejecuta cuando carga el fxml //
     @FXML
     public void initialize() 
@@ -54,6 +60,7 @@ public class MainController
         actualizarTurno();
         actualizarEstado("En juego");
         dibujarTablero();
+        reproducirMusicaJuego();
     }
 
     // coloca las piezas en su posicion inicial //
@@ -282,5 +289,29 @@ public class MainController
         actualizarEstado("En juego");
 
         dibujarTablero();
+    }
+
+    // metodo para reproducir musica del juego //
+    private void reproducirMusicaJuego()
+    {
+        try
+        {
+            String ruta = getClass().getResource("/resources/Sound/juego.mp3").toExternalForm();
+
+            Media musica = new Media(ruta);
+            reproductorJuego = new MediaPlayer(musica);
+
+            // volumen //
+            reproductorJuego.setVolume(0.1);
+
+            // Modo Gojo(Infinito) //
+            reproductorJuego.setCycleCount(MediaPlayer.INDEFINITE);
+
+            reproductorJuego.play();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }

@@ -11,7 +11,7 @@ public class Peon extends Pz
         super(esBlanca);
     }
 
-    // devuelve la ruta de la imagen //
+    // ruta de la imagen //
     @Override
     public String obtenerRutaImagen()
     {

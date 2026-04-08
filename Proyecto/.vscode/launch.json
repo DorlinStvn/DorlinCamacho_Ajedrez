@@ -7,7 +7,7 @@
             "request": "launch",
             "mainClass": "main.App",
             "classPaths": ["${workspaceFolder}/bin"],
-            "vmArgs": "--module-path \"C:\\Users\\dorli\\OneDrive\\Documentos\\Programacion3\\openjfx-21.0.10_windows-x64_bin-sdk\\javafx-sdk-21.0.10\\lib\" --add-modules javafx.controls,javafx.fxml --enable-native-access=javafx.graphics"
+            "vmArgs": "--module-path \"C:\\Users\\dorli\\OneDrive\\Documentos\\Programacion3\\openjfx-21.0.10_windows-x64_bin-sdk\\javafx-sdk-21.0.10\\lib\" --add-modules javafx.controls,javafx.fxml,javafx.media --enable-native-access=javafx.graphics"
         }
     ]
 }
