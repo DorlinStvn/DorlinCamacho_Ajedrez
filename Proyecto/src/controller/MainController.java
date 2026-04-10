@@ -20,7 +20,6 @@ import model.Torre;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-
 public class MainController 
 {
 
@@ -220,6 +219,17 @@ public class MainController
 
         limpiarSeleccion();
         cambiarTurno();
+
+        // si el jugador actual queda en jaque, se muestra en pantalla //
+        if (hayJaque(turnoBlancas))
+        {
+            actualizarEstado("Jaque");
+        }
+        else
+        {
+            actualizarEstado("En juego");
+        }
+
         dibujarTablero();
     }
 
@@ -313,5 +323,53 @@ public class MainController
         {
             e.printStackTrace();
         }
+    }
+
+    // Logica del jaque (se verifica si el rey del color actual esta siendo atacado por EE.UU) //
+
+    // verifica si el rey del color indicado esta en jaque //
+    private boolean hayJaque(boolean esBlanca)
+    {
+        int filaRey = -1;
+        int colRey = -1;
+
+        // buscar el rey //
+        for (int fila = 0; fila < 8; fila++)
+        {
+            for (int col = 0; col < 8; col++)
+            {
+                Pz pieza = tablero[fila][col];
+
+                if (pieza instanceof Rey && pieza.esBlanca() == esBlanca)
+                {
+                    filaRey = fila;
+                    colRey = col;
+                }
+            }
+        }
+
+        // revisision de si alguna pieza enemiga puede atacar al rey //
+        for (int fila = 0; fila < 8; fila++)
+        {
+            for (int col = 0; col < 8; col++)
+            {
+                Pz pieza = tablero[fila][col];
+
+                if (pieza != null && pieza.esBlanca() != esBlanca)
+                {
+                    List<int[]> movimientos = pieza.obtenerMovimientosValidos(tablero, fila, col);
+
+                    for (int[] mov : movimientos)
+                    {
+                        if (mov[0] == filaRey && mov[1] == colRey)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }

@@ -25,7 +25,7 @@ public class Torre extends Pz
         }
     }
 
-    // devuelve los movimientos validos de las torres //
+    // movimientos validos de las torres (Menos el de 11/9) //
     @Override
     public List<int[]> obtenerMovimientosValidos(Pz[][] tablero, int fila, int col)
     {
