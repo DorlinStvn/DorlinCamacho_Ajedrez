@@ -55,6 +55,10 @@ public class MainController
     @FXML
     public void initialize() 
     {
+          // cargar fuente personalizada //
+        javafx.scene.text.Font.loadFont(
+        getClass().getResourceAsStream("/resources/Letra/Cinzel-VariableFont_wght.ttf"),14);
+
         inicializarTablero();
         actualizarTurno();
         actualizarEstado("En juego");
@@ -111,7 +115,7 @@ public class MainController
                 StackPane celda = new StackPane();
 
                 // tamano visual de cada casilla //
-                celda.setPrefSize(63, 59);
+                celda.setPrefSize(62, 58);
 
                 // resalta la casilla seleccionada //
                 if (fila == filaSeleccionada && col == colSeleccionada)

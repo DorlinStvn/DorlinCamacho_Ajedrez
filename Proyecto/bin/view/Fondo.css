@@ -1,12 +1,21 @@
+/* fuente */
+@font-face {
+    font-family: "Cinzel";
+    src: url("../resources/Letra/Cinzel-VariableFont_wght.ttf");
+}
 
+/* base */
 .root {
     -fx-background-color: black;
+    -fx-font-family: "Cinzel";
 }
 
 .fondo_externo {
     -fx-background-color: black;
+    -fx-font-family: "Cinzel";
 }
-/* fondo del tablero, menu y juego */
+
+/* fondo del tablero */
 .fondo_tablero {
     -fx-background-image: url("../resources/Img/Tablero.PNG");
     -fx-background-size: cover;
@@ -14,6 +23,7 @@
     -fx-background-repeat: no-repeat;
 }
 
+/* fondo del menu */
 .fondo_menu {
     -fx-background-image: url("../resources/Img/Menu.PNG");
     -fx-background-size: contain;
@@ -22,7 +32,26 @@
     -fx-background-color: black;
 }
 
+/* fondo del juego */
+.fondo_juego {
+    -fx-background-image: url("../resources/Img/FondoJuego.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+/* fondo final */
+.fondo_final {
+    -fx-background-image: url("../resources/Img/valhalla.png");
+    -fx-background-size: contain;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: black;
+}
+
+/* botones menu */
 .boton_menu {
+    -fx-font-family: "Cinzel";
     -fx-background-color: linear-gradient(to bottom, #5a3b1e, #2e1d0f);
     -fx-text-fill: #f5e6c8;
     -fx-font-size: 20px;
@@ -49,26 +78,25 @@
     -fx-translate-y: 2;
 }
 
-.fondo_juego {
-    -fx-background-image: url("../resources/Img/FondoJuego.png");
-    -fx-background-size: cover;
-    -fx-background-position: center;
-    -fx-background-repeat: no-repeat;
-}
-
+/* texto turno */
 .texto_turno {
+    -fx-font-family: "Cinzel";
     -fx-text-fill: #f5e6c8;
     -fx-font-size: 24px;
     -fx-font-weight: bold;
 }
 
+/* texto estado */
 .texto_estado {
+    -fx-font-family: "Cinzel";
     -fx-text-fill: #d9c7a1;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
 }
 
+/* boton reiniciar */
 .boton_reiniciar {
+    -fx-font-family: "Cinzel";
     -fx-background-color: linear-gradient(to bottom, #5a3b1e, #2e1d0f);
     -fx-text-fill: #f5e6c8;
     -fx-font-size: 16px;
@@ -93,19 +121,12 @@
     -fx-translate-y: 2;
 }
 
-.fondo_final {
-    -fx-background-image: url("../resources/Img/valhalla.png");
-    -fx-background-size: contain;
-    -fx-background-position: center;
-    -fx-background-repeat: no-repeat;
-    -fx-background-color: black;
-}
-
+/* titulo victoria */
 .titulo_victoria {
+    -fx-font-family: "Cinzel";
     -fx-text-fill: #ffd700; 
     -fx-font-size: 40px;
     -fx-font-weight: bold;
     -fx-effect: dropshadow(gaussian, black, 10, 0.6, 0, 0);
 }
-
 /* La mayor parte de este css proviene de una plantilla en linea (Alterada a mis gustos de colores) */

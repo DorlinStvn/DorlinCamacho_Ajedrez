@@ -35,7 +35,7 @@
             <Button fx:id="btnReiniciar"
                     layoutX="500.0"
                     layoutY="-60.0"
-                    prefWidth="170.0"
+                    prefWidth="190.0"
                     prefHeight="40.0"
                     text="Reiniciar partida"
                     onAction="#reiniciarPartida"
