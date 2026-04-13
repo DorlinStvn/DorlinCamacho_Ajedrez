@@ -199,38 +199,142 @@ public class MainController
 
         Pz pieza = tablero[fila][col];
 
+        // limpiar lista antes de calcular //
+        movimientosPosibles = new ArrayList<>();
+
         if (pieza != null)
         {
-            movimientosPosibles = pieza.obtenerMovimientosValidos(tablero, fila, col);
-        }
-        else
-        {
-            movimientosPosibles = new ArrayList<>();
+            // obtener movimientos normales //
+            List<int[]> movimientosOriginales = pieza.obtenerMovimientosValidos(tablero, fila, col);
+
+            for (int i = 0; i < movimientosOriginales.size(); i++)
+            {
+                int[] mov = movimientosOriginales.get(i);
+
+                int filaDestino = mov[0];
+                int colDestino = mov[1];
+
+                Pz piezaMovida = tablero[fila][col];
+                Pz piezaCapturada = tablero[filaDestino][colDestino];
+
+                // simular movimiento //
+                tablero[filaDestino][colDestino] = piezaMovida;
+                tablero[fila][col] = null;
+
+                // verificar si el rey sigue en jaque //
+                if (!hayJaque(pieza.esBlanca()))
+                {
+                    movimientosPosibles.add(new int[]{filaDestino, colDestino});
+                }
+
+                // deshacer movimiento //
+                tablero[fila][col] = piezaMovida;
+                tablero[filaDestino][colDestino] = piezaCapturada;
+            }
         }
 
         dibujarTablero();
     }
 
-    // movimiento de una pieza a una nueva casilla //
+   // move la pieza seleccionada a la casilla destino //
     private void moverPieza(int filaDestino, int colDestino)
     {
-        tablero[filaDestino][colDestino] = tablero[filaSeleccionada][colSeleccionada];
+        // guardar la pieza antes de moverla //
+        Pz piezaMovida = tablero[filaSeleccionada][colSeleccionada];
+
+        tablero[filaDestino][colDestino] = piezaMovida;
         tablero[filaSeleccionada][colSeleccionada] = null;
+
+        // promocion del peon (si un peon llega al final del tablero, se convierte en reina automaticamente) //
+
+        if (piezaMovida instanceof Peon)
+        {
+            // peon blanco llega al final //
+            if (piezaMovida.esBlanca() && filaDestino == 0)
+            {
+                tablero[filaDestino][colDestino] = new Reina(true);
+            }
+
+            // peon negro llega al final //
+            if (!piezaMovida.esBlanca() && filaDestino == 7)
+            {
+                tablero[filaDestino][colDestino] = new Reina(false);
+            }
+        }
 
         limpiarSeleccion();
         cambiarTurno();
 
-        // si el jugador actual queda en jaque, se muestra en pantalla //
+        // Logica del jaque mate //
+
+        // si el jugador actual queda en jaque //
         if (hayJaque(turnoBlancas))
         {
-            actualizarEstado("Jaque");
+            // si no tiene forma de salir, es jaque mate //
+            if (hayJaqueMate(turnoBlancas))
+            {
+                String ganador;
+
+                // como el turno ya cambio, el contrario es el ganador //
+                if (turnoBlancas)
+                {
+                    ganador = "Negras";
+                }
+                else
+                {
+                    ganador = "Blancas";
+                }
+
+                // mostrar quien gano //
+                actualizarEstado("Victoria " + ganador);
+
+                // cambio de escena //
+                try
+                {
+                    // carga el menu final //
+                    javafx.fxml.FXMLLoader carga = new javafx.fxml.FXMLLoader(
+                        getClass().getResource("/view/MenF.fxml")
+                    );
+
+                    javafx.scene.Parent raiz = carga.load();
+                    // obtiene el controlador del menu final //
+                    controller.MenuController controller = carga.getController();
+                    controller.setGanador(ganador);
+
+                    // obtiene el escenario actual //
+                    javafx.stage.Stage escenario = (javafx.stage.Stage) gridTablero.getScene().getWindow();
+
+                    javafx.scene.Scene nuevaEscena = new javafx.scene.Scene(raiz);
+
+                    escenario.setScene(nuevaEscena);
+                    escenario.setWidth(700);
+                    escenario.setHeight(700);
+                    escenario.setResizable(false);
+                    escenario.centerOnScreen();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+                // detiene el resto del metodo para no seguir dibujando el tablero //
+                return;
+            }
+            else
+            {
+                // si hay jaque pero aun hay salida //
+                actualizarEstado("Jaque");
+            }
         }
         else
         {
+            // si no hay jaque, el juego sigue normal //
             actualizarEstado("En juego");
         }
 
+        // vuelve a dibujar el tablero //
         dibujarTablero();
+
     }
 
     // limpia la seleccion actual y los movimientos marcados //
@@ -348,7 +452,7 @@ public class MainController
             }
         }
 
-        // revisision de si alguna pieza enemiga puede atacar al rey //
+        // revision de si alguna pieza enemiga puede atacar al rey //
         for (int fila = 0; fila < 8; fila++)
         {
             for (int col = 0; col < 8; col++)
@@ -371,5 +475,58 @@ public class MainController
         }
 
         return false;
+    }
+
+    //jaque mate (se verifica si el jugador en jaque tiene alguna forma de salir del jaque, si no, es mate) //
+
+    // verifica si el jugador indicado esta en jaque mate //
+    private boolean hayJaqueMate(boolean esBlanca)
+    {
+        // si no hay jaque, no hay mate //
+        if (!hayJaque(esBlanca))
+        {
+            return false;
+        }
+
+        // prueba todos los movimientos posibles //
+        for (int fila = 0; fila < 8; fila++)
+        {
+            for (int col = 0; col < 8; col++)
+            {
+                Pz pieza = tablero[fila][col];
+
+                if (pieza != null && pieza.esBlanca() == esBlanca)
+                {
+                    List<int[]> movimientos = pieza.obtenerMovimientosValidos(tablero, fila, col);
+
+                    for (int[] mov : movimientos)
+                    {
+                        int filaDestino = mov[0];
+                        int colDestino = mov[1];
+
+                        Pz piezaMovida = tablero[fila][col];
+                        Pz piezaCapturada = tablero[filaDestino][colDestino];
+
+                        // simular movimiento //
+                        tablero[filaDestino][colDestino] = piezaMovida;
+                        tablero[fila][col] = null;
+
+                        boolean sigueEnJaque = hayJaque(esBlanca);
+
+                        // deshacer movimiento //
+                        tablero[fila][col] = piezaMovida;
+                        tablero[filaDestino][colDestino] = piezaCapturada;
+
+                        // si existe una salida, no es mate //
+                        if (!sigueEnJaque)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 }

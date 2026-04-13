@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -152,5 +153,14 @@ public class MenuController
         {
             e.printStackTrace();
         }
+    }
+    
+    @FXML
+    private Label lblGanador;
+
+    // metodo para recibir quien gano //
+    public void setGanador(String ganador)
+    {
+        lblGanador.setText("Victoria " + ganador);
     }
 }

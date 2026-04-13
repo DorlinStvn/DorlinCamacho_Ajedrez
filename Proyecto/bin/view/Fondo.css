@@ -93,4 +93,19 @@
     -fx-translate-y: 2;
 }
 
+.fondo_final {
+    -fx-background-image: url("../resources/Img/valhalla.png");
+    -fx-background-size: contain;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: black;
+}
+
+.titulo_victoria {
+    -fx-text-fill: #ffd700; 
+    -fx-font-size: 40px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, black, 10, 0.6, 0, 0);
+}
+
 /* La mayor parte de este css proviene de una plantilla en linea (Alterada a mis gustos de colores) */
